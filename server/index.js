@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const cron = require('node-cron');
+const path = require('path');
 const config = require('./config');
 const Database = require('./database');
 const JobFetcher = require('./jobFetcher');
@@ -31,6 +32,13 @@ app.use('/api/', limiter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+  const buildPath = path.join(__dirname, '../client/build');
+  console.log('Serving static files from:', buildPath);
+  app.use(express.static(buildPath));
+}
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -197,6 +205,13 @@ app.use((err, req, res, next) => {
 
 // 404 handler
 app.use('*', (req, res) => {
+  // In production, serve React app for non-API routes
+  if (process.env.NODE_ENV === 'production' && !req.path.startsWith('/api/')) {
+    const buildPath = path.join(__dirname, '../client/build');
+    return res.sendFile(path.join(buildPath, 'index.html'));
+  }
+  
+  // For API routes or development, return JSON error
   res.status(404).json({ error: 'Route not found' });
 });
 
