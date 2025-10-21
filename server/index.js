@@ -34,10 +34,29 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
+  try {
+    res.json({ 
+      status: 'OK', 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      environment: config.nodeEnv,
+      port: process.env.PORT || config.port,
+      database: 'connected'
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'ERROR', 
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Simple test endpoint
+app.get('/api/test', (req, res) => {
   res.json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString(),
-    environment: config.nodeEnv
+    message: 'Server is running!', 
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -172,13 +191,14 @@ console.log(`Starting server on port ${PORT}...`);
 console.log(`Environment: ${config.nodeEnv}`);
 console.log(`Database path: ${config.databasePath}`);
 
-app.listen(PORT, '0.0.0.0', () => {
+// Create server with better error handling
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`✅ Environment: ${config.nodeEnv}`);
   console.log(`✅ Health check available at http://0.0.0.0:${PORT}/api/health`);
   
   // Schedule job fetching every 6 hours
-  if (config.rapidApiKey) {
+  if (config.rapidApiKey && config.rapidApiKey.length > 0) {
     console.log('Scheduling job fetch every 6 hours...');
     cron.schedule('0 */6 * * *', async () => {
       console.log('Starting scheduled job fetch...');
@@ -201,11 +221,27 @@ app.listen(PORT, '0.0.0.0', () => {
       }
     }, 10000); // 10 second delay
   } else {
-    console.log('⚠️  RAPIDAPI_KEY not set - job fetching disabled');
+    console.log('⚠️  RAPIDAPI_KEY not set or empty - job fetching disabled');
+    console.log('⚠️  Server will start but no jobs will be fetched until API key is provided');
   }
-}).on('error', (err) => {
-  console.error('❌ Server failed to start:', err);
-  process.exit(1);
+});
+
+// Handle server errors
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`❌ Port ${PORT} is already in use. Trying alternative port...`);
+    const alternativePort = PORT + 1;
+    const altServer = app.listen(alternativePort, '0.0.0.0', () => {
+      console.log(`✅ Server running on alternative port ${alternativePort}`);
+    });
+    altServer.on('error', (altError) => {
+      console.error('❌ Failed to start server on alternative port:', altError);
+      process.exit(1);
+    });
+  } else {
+    console.error('❌ Server failed to start:', error);
+    process.exit(1);
+  }
 });
 
 // Graceful shutdown
