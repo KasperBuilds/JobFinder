@@ -10,7 +10,7 @@ const Database = require('./database');
 const JobFetcher = require('./jobFetcher');
 
 // Function to find an available port
-function findAvailablePort(startPort, maxAttempts = 10) {
+function findAvailablePort(startPort, maxAttempts = 20) {
   return new Promise((resolve, reject) => {
     let port = startPort;
     let attempts = 0;
@@ -22,17 +22,22 @@ function findAvailablePort(startPort, maxAttempts = 10) {
       }
       
       const server = net.createServer();
+      
+      server.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+          port++;
+          attempts++;
+          setTimeout(tryPort, 100); // Small delay between attempts
+        } else {
+          reject(err);
+        }
+      });
+      
       server.listen(port, '0.0.0.0', () => {
         server.once('close', () => {
           resolve(port);
         });
         server.close();
-      });
-      
-      server.on('error', () => {
-        port++;
-        attempts++;
-        tryPort();
       });
     };
     
@@ -67,15 +72,21 @@ app.use(express.urlencoded({ extended: true }));
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   try {
-    res.json({ 
+    const healthData = { 
       status: 'OK', 
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       environment: config.nodeEnv,
       port: process.env.PORT || config.port,
-      database: 'connected'
-    });
+      database: 'connected',
+      memory: process.memoryUsage(),
+      version: process.version
+    };
+    
+    console.log('Health check requested:', healthData);
+    res.status(200).json(healthData);
   } catch (error) {
+    console.error('Health check error:', error);
     res.status(500).json({ 
       status: 'ERROR', 
       error: error.message,
@@ -234,8 +245,14 @@ async function startServer() {
     console.log(`Environment: ${config.nodeEnv}`);
     console.log(`Database path: ${config.databasePath}`);
     
-    const PORT = await findAvailablePort(startPort);
-    console.log(`✅ Found available port: ${PORT}`);
+    let PORT;
+    try {
+      PORT = await findAvailablePort(startPort);
+      console.log(`✅ Found available port: ${PORT}`);
+    } catch (error) {
+      console.log(`⚠️  Port detection failed, using fallback port: ${startPort}`);
+      PORT = startPort;
+    }
     
     const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`✅ Server running on port ${PORT}`);
@@ -268,6 +285,26 @@ async function startServer() {
       } else {
         console.log('⚠️  RAPIDAPI_KEY not set or empty - job fetching disabled');
         console.log('⚠️  Server will start but no jobs will be fetched until API key is provided');
+      }
+    });
+    
+    // Handle server errors with retry logic
+    server.on('error', (error) => {
+      if (error.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is in use, trying alternative...`);
+        const altPort = PORT + 1;
+        const altServer = app.listen(altPort, '0.0.0.0', () => {
+          console.log(`✅ Server running on alternative port ${altPort}`);
+          console.log(`✅ Health check available at http://0.0.0.0:${altPort}/api/health`);
+        });
+        
+        altServer.on('error', (altError) => {
+          console.error('❌ Failed to start server on alternative port:', altError);
+          process.exit(1);
+        });
+      } else {
+        console.error('❌ Server error:', error);
+        process.exit(1);
       }
     });
     
