@@ -154,7 +154,7 @@ class JobFetcher {
       experience_level: this.mapExperienceLevel(job.job_highlights?.Qualifications),
       education_level: this.extractEducationLevel(job.job_highlights?.Qualifications),
       skills: this.extractSkills(job.job_highlights?.Qualifications),
-      benefits: job.job_highlights?.Benefits || ''
+      benefits: this.formatBenefits(job.job_highlights?.Benefits)
     };
   }
 
@@ -275,6 +275,27 @@ class JobFetcher {
     }
     
     return qualifications.toString();
+  }
+
+  formatBenefits(benefits) {
+    if (!benefits) return '';
+    
+    // Handle array case
+    if (Array.isArray(benefits)) {
+      return benefits.join(', ');
+    }
+    
+    // Handle object case - try to extract meaningful content
+    if (typeof benefits === 'object') {
+      // If it's an object with keys, join the values
+      if (Object.keys(benefits).length > 0) {
+        return Object.values(benefits).join(', ');
+      }
+      return '';
+    }
+    
+    // Handle string case
+    return benefits.toString();
   }
 
   async saveJobs(jobs) {
