@@ -249,10 +249,10 @@ function HomePage() {
       <HeroSection>
         <HeroContent>
           <HeroTitle>
-            Find Your Dream Job in International Affairs
+            Find Your Dream Internship
           </HeroTitle>
           <HeroSubtitle>
-            Discover opportunities in International Relations, Political Science, Law, 
+            Discover internship and career opportunities in International Relations, Political Science, Law, 
             Public Policy, Diplomacy, Human Rights, International Development, and International Law
           </HeroSubtitle>
           <CTAButton to="/jobs">

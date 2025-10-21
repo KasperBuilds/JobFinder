@@ -129,10 +129,10 @@ const AboutPage = () => {
       <HeroSection>
         <HeroContent>
           <HeroTitle>
-            About AHS Job Portal
+            About CMU AHS Internship & Career Portal
           </HeroTitle>
           <HeroSubtitle>
-            Connecting talented professionals with meaningful careers in international affairs, 
+            Connecting talented students and professionals with meaningful internships and careers in international affairs, 
             law, and policy
           </HeroSubtitle>
         </HeroContent>

@@ -27,7 +27,7 @@ const HeaderContent = styled.div`
 const Logo = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   font-size: 1.5rem;
   font-weight: 700;
   color: #1e40af;
@@ -36,6 +36,33 @@ const Logo = styled(Link)`
   &:hover {
     color: #1d4ed8;
   }
+`;
+
+const LogoImage = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+`;
+
+const LogoText = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+`;
+
+const LogoTitle = styled.div`
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e40af;
+`;
+
+const LogoSubtitle = styled.div`
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: -2px;
 `;
 
 const Nav = styled.nav`
@@ -131,8 +158,14 @@ function Header() {
     <HeaderContainer>
       <HeaderContent>
         <Logo to="/">
-          <FiBriefcase />
-          AHS Jobs
+          <LogoImage 
+            src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop&crop=face&auto=format&q=80" 
+            alt="Alexander Hamilton Society Logo"
+          />
+          <LogoText>
+            <LogoTitle>CMU AHS</LogoTitle>
+            <LogoSubtitle>Internships & Careers</LogoSubtitle>
+          </LogoText>
         </Logo>
         
         <Nav isOpen={isMenuOpen}>
