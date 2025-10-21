@@ -39,10 +39,11 @@ const Logo = styled(Link)`
 `;
 
 const LogoImage = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 8px;
   object-fit: cover;
+  border: 2px solid #1e40af;
 `;
 
 const LogoText = styled.div`
@@ -159,8 +160,11 @@ function Header() {
       <HeaderContent>
         <Logo to="/">
           <LogoImage 
-            src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop&crop=face&auto=format&q=80" 
+            src="/hamilton-logo.png" 
             alt="Alexander Hamilton Society Logo"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
           />
           <LogoText>
             <LogoTitle>CMU AHS</LogoTitle>
