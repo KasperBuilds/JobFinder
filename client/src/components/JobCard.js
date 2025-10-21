@@ -108,7 +108,7 @@ const ApplyLink = styled.div`
 
 function JobCard({ job }) {
   const formatSalary = () => {
-    if (job.salary_min && job.salary_max) {
+    if (job.salary_min && job.salary_max && job.salary_min > 0 && job.salary_max > 0) {
       return `${job.currency} ${job.salary_min.toLocaleString()} - ${job.salary_max.toLocaleString()}`;
     }
     return null;
@@ -144,7 +144,7 @@ function JobCard({ job }) {
         )}
       </Details>
       
-      {job.description && (
+      {job.description && job.description.trim() && (
         <Description>
           {job.description.replace(/<[^>]*>/g, '').substring(0, 200)}...
         </Description>
