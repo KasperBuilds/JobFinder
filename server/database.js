@@ -5,7 +5,17 @@ const config = require('./config');
 class Database {
   constructor() {
     // Use Railway's persistent volume or fallback to local path
-    const dbPath = process.env.DATABASE_PATH || config.databasePath;
+    // Try multiple paths for Railway compatibility
+    let dbPath;
+    if (process.env.DATABASE_PATH) {
+      dbPath = process.env.DATABASE_PATH;
+    } else if (process.env.RAILWAY_ENVIRONMENT) {
+      // Railway environment - use /tmp for writable directory
+      dbPath = '/tmp/jobs.db';
+    } else {
+      dbPath = config.databasePath;
+    }
+    
     console.log(`Initializing database at: ${dbPath}`);
     
     try {
