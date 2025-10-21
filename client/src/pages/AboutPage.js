@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FiTarget, FiUsers, FiGlobe, FiTrendingUp, FiClock, FiShield, FiBriefcase, FiBookOpen, FiHeart } from 'react-icons/fi';
+import { FiTarget, FiUsers, FiGlobe, FiTrendingUp, FiClock, FiShield, FiBriefcase, FiHeart } from 'react-icons/fi';
 
 const PageContainer = styled.div`
   min-height: 100vh;
