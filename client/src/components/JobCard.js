@@ -130,6 +130,9 @@ function JobCard({ job }) {
             {job.employment_type}
           </DetailItem>
         )}
+        <DetailItem>
+          {job.remote_allowed ? 'Remote' : 'Onsite'}
+        </DetailItem>
       </Details>
       
       {job.description && job.description.trim() && (
@@ -138,10 +141,6 @@ function JobCard({ job }) {
         </Description>
       )}
       
-      
-      {job.remote_allowed && (
-        <RemoteBadge>Remote</RemoteBadge>
-      )}
       
       <ApplyLink>
         <FiExternalLink size={14} />

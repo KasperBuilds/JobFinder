@@ -80,14 +80,14 @@ class JobFetcher {
 
   getSearchQueriesForCategory(category) {
     const queries = {
-      'International Relations': ['international relations internship', 'foreign affairs intern', 'diplomacy intern'],
-      'Political Science': ['political science internship', 'policy intern', 'government intern'],
-      'Law': ['legal internship', 'law intern', 'paralegal intern'],
-      'Public Policy': ['public policy internship', 'policy analysis intern', 'government affairs intern'],
-      'Diplomacy': ['diplomacy internship', 'embassy intern', 'consular intern'],
-      'Human Rights': ['human rights internship', 'advocacy intern', 'nonprofit intern'],
-      'International Development': ['international development internship', 'NGO intern'],
-      'International Law': ['international law internship', 'treaty law intern', 'humanitarian law intern']
+      'International Relations': ['international relations internship'], //, 'foreign affairs intern', 'diplomacy intern'],
+      'Political Science': ['political science internship'], //, 'policy intern', 'government intern'],
+      'Law': ['legal internship'], //, 'law intern', 'paralegal intern'],
+      'Public Policy': ['public policy internship'], //, 'policy analysis intern', 'government affairs intern'],
+      'Diplomacy': ['diplomacy internship'], //, 'embassy intern', 'consular intern'],
+      'Human Rights': ['human rights internship'], //, 'advocacy intern', 'nonprofit intern'],
+      'International Development': ['international development internship'], //, 'NGO intern'],
+      'International Law': ['international law internship'] //, 'treaty law intern', 'humanitarian law intern']
     };
 
     return queries[category] || [`${category} internship`];

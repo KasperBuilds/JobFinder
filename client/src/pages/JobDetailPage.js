@@ -252,9 +252,9 @@ function JobDetailPage() {
             Employment Type: {job.employment_type || 'Not specified'}
           </EmploymentType>
           
-          {job.remote_allowed && (
-            <RemoteStatus>✓ Remote work allowed</RemoteStatus>
-          )}
+          <RemoteStatus>
+            {job.remote_allowed ? '✓ Remote work allowed' : '📍 Onsite work required'}
+          </RemoteStatus>
           
           
           {job.description && (
