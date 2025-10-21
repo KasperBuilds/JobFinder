@@ -4,46 +4,9 @@ const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const cron = require('node-cron');
-const net = require('net');
 const config = require('./config');
 const Database = require('./database');
 const JobFetcher = require('./jobFetcher');
-
-// Function to find an available port
-function findAvailablePort(startPort, maxAttempts = 20) {
-  return new Promise((resolve, reject) => {
-    let port = startPort;
-    let attempts = 0;
-    
-    const tryPort = () => {
-      if (attempts >= maxAttempts) {
-        reject(new Error('No available ports found'));
-        return;
-      }
-      
-      const server = net.createServer();
-      
-      server.on('error', (err) => {
-        if (err.code === 'EADDRINUSE') {
-          port++;
-          attempts++;
-          setTimeout(tryPort, 100); // Small delay between attempts
-        } else {
-          reject(err);
-        }
-      });
-      
-      server.listen(port, '0.0.0.0', () => {
-        server.once('close', () => {
-          resolve(port);
-        });
-        server.close();
-      });
-    };
-    
-    tryPort();
-  });
-}
 
 const app = express();
 const db = new Database();
@@ -237,22 +200,13 @@ app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// Start server with dynamic port selection
+// Start server with simple port handling
 async function startServer() {
   try {
-    const startPort = process.env.PORT || config.port;
-    console.log(`Finding available port starting from ${startPort}...`);
+    const PORT = process.env.PORT || config.port;
+    console.log(`Starting server on port ${PORT}...`);
     console.log(`Environment: ${config.nodeEnv}`);
     console.log(`Database path: ${config.databasePath}`);
-    
-    let PORT;
-    try {
-      PORT = await findAvailablePort(startPort);
-      console.log(`✅ Found available port: ${PORT}`);
-    } catch (error) {
-      console.log(`⚠️  Port detection failed, using fallback port: ${startPort}`);
-      PORT = startPort;
-    }
     
     const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`✅ Server running on port ${PORT}`);
@@ -288,10 +242,10 @@ async function startServer() {
       }
     });
     
-    // Handle server errors with retry logic
+    // Handle server errors
     server.on('error', (error) => {
       if (error.code === 'EADDRINUSE') {
-        console.error(`❌ Port ${PORT} is in use, trying alternative...`);
+        console.error(`❌ Port ${PORT} is in use, trying alternative port...`);
         const altPort = PORT + 1;
         const altServer = app.listen(altPort, '0.0.0.0', () => {
           console.log(`✅ Server running on alternative port ${altPort}`);
