@@ -228,10 +228,10 @@ async function startServer() {
       console.log(`✅ Environment: ${config.nodeEnv}`);
       console.log(`✅ Health check available at http://0.0.0.0:${PORT}/api/health`);
       
-      // Schedule job fetching every 6 hours
+      // Schedule job fetching every 2 days
       if (config.rapidApiKey && config.rapidApiKey.length > 0) {
-        console.log('Scheduling job fetch every 6 hours...');
-        cron.schedule('0 */6 * * *', async () => {
+        console.log('Scheduling job fetch every 2 days...');
+        cron.schedule('0 0 */2 * *', async () => {
           console.log('Starting scheduled job fetch...');
           try {
             await jobFetcher.runFullFetch();
