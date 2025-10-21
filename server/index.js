@@ -168,9 +168,14 @@ app.use('*', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || config.port;
+console.log(`Starting server on port ${PORT}...`);
+console.log(`Environment: ${config.nodeEnv}`);
+console.log(`Database path: ${config.databasePath}`);
+
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${config.nodeEnv}`);
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`✅ Environment: ${config.nodeEnv}`);
+  console.log(`✅ Health check available at http://0.0.0.0:${PORT}/api/health`);
   
   // Schedule job fetching every 6 hours
   if (config.rapidApiKey) {
@@ -196,8 +201,11 @@ app.listen(PORT, '0.0.0.0', () => {
       }
     }, 10000); // 10 second delay
   } else {
-    console.log('RAPIDAPI_KEY not set - job fetching disabled');
+    console.log('⚠️  RAPIDAPI_KEY not set - job fetching disabled');
   }
+}).on('error', (err) => {
+  console.error('❌ Server failed to start:', err);
+  process.exit(1);
 });
 
 // Graceful shutdown

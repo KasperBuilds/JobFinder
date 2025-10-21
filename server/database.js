@@ -6,8 +6,16 @@ class Database {
   constructor() {
     // Use Railway's persistent volume or fallback to local path
     const dbPath = process.env.DATABASE_PATH || config.databasePath;
-    this.db = new sqlite3.Database(dbPath);
-    this.init();
+    console.log(`Initializing database at: ${dbPath}`);
+    
+    try {
+      this.db = new sqlite3.Database(dbPath);
+      this.init();
+      console.log('✅ Database initialized successfully');
+    } catch (error) {
+      console.error('❌ Database initialization failed:', error);
+      throw error;
+    }
   }
 
   init() {
