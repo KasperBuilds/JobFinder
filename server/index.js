@@ -271,12 +271,6 @@ async function startServer() {
       }
     });
     
-    // Handle server errors
-    server.on('error', (error) => {
-      console.error('❌ Server error:', error);
-      process.exit(1);
-    });
-    
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);
