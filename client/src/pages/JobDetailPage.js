@@ -262,7 +262,7 @@ function JobDetailPage() {
             <RemoteStatus>✓ Remote work allowed</RemoteStatus>
           )}
           
-          {job.salary_min && job.salary_max && (
+          {job.salary_min && job.salary_max && job.salary_min > 0 && job.salary_max > 0 && (
             <SalaryInfo>
               Salary: {job.currency} {job.salary_min.toLocaleString()} - {job.salary_max.toLocaleString()}
             </SalaryInfo>
@@ -293,18 +293,18 @@ function JobDetailPage() {
             
             <DetailSection>
               <SectionTitle>Job Details</SectionTitle>
-              {job.experience_level && (
+              {job.experience_level && job.experience_level !== '0' && job.experience_level.trim() && (
                 <div><strong>Experience Level:</strong> {job.experience_level}</div>
               )}
-              {job.education_level && (
+              {job.education_level && job.education_level !== '0' && job.education_level.trim() && (
                 <div><strong>Education Level:</strong> {job.education_level}</div>
               )}
-              {job.skills && (
+              {job.skills && job.skills !== '0' && job.skills.trim() && (
                 <Skills>
                   <strong>Skills:</strong> {job.skills}
                 </Skills>
               )}
-              {job.benefits && (
+              {job.benefits && job.benefits !== '0' && job.benefits.trim() && (
                 <div><strong>Benefits:</strong> {job.benefits}</div>
               )}
             </DetailSection>
