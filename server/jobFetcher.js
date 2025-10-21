@@ -109,7 +109,8 @@ class JobFetcher {
         language: 'en',
         num_pages: '10',
         date_posted: 'month',
-        employment_types: 'INTERN'
+        employment_types: 'INTERN',
+        exclude_job_publishers: 'bigbendholidayhotel.com'
       },
       headers: {
         'Accept': 'application/json',
