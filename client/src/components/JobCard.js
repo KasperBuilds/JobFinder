@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { FiMapPin, FiClock, FiDollarSign, FiExternalLink } from 'react-icons/fi';
+import { FiMapPin, FiClock, FiExternalLink } from 'react-icons/fi';
 
 const Card = styled(Link)`
   display: block;

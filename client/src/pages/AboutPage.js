@@ -123,50 +123,7 @@ const FeatureDescription = styled.p`
   line-height: 1.6;
 `;
 
-const categories = [
-  {
-    name: 'International Relations',
-    description: 'Jobs in diplomacy, foreign affairs, international organizations',
-    icon: FiGlobe
-  },
-  {
-    name: 'Political Science',
-    description: 'Research, analysis, and policy positions',
-    icon: FiUsers
-  },
-  {
-    name: 'Law',
-    description: 'Legal positions, attorneys, legal counsel',
-    icon: FiBookOpen
-  },
-  {
-    name: 'Public Policy',
-    description: 'Government policy, regulatory affairs',
-    icon: FiBriefcase
-  },
-  {
-    name: 'Diplomacy',
-    description: 'Diplomatic positions, embassy roles',
-    icon: FiGlobe
-  },
-  {
-    name: 'Human Rights',
-    description: 'Advocacy, human rights organizations',
-    icon: FiUsers
-  },
-  {
-    name: 'International Development',
-    description: 'NGO positions, development work',
-    icon: FiBriefcase
-  },
-  {
-    name: 'International Law',
-    description: 'International legal positions',
-    icon: FiBookOpen
-  }
-];
-
-function AboutPage() {
+const AboutPage = () => {
   return (
     <PageContainer>
       <HeroSection>

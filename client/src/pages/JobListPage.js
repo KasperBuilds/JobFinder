@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
-import { FiSearch, FiFilter, FiX, FiRefreshCw } from 'react-icons/fi';
+import { FiSearch, FiRefreshCw } from 'react-icons/fi';
 import { useJobs } from '../hooks/useJobs';
-import { useStats, useFilterOptions } from '../hooks/useStats';
 import JobCard from '../components/JobCard';
 
 const PageContainer = styled.div`
@@ -73,22 +72,6 @@ const SearchInput = styled.input`
   }
 `;
 
-const FilterButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: ${props => props.active ? '#1e40af' : 'white'};
-  color: ${props => props.active ? 'white' : '#64748b'};
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  transition: all 0.2s;
-  
-  &:hover {
-    background: ${props => props.active ? '#1d4ed8' : '#f8fafc'};
-  }
-`;
 
 const MainContent = styled.div`
   max-width: 1200px;
@@ -184,8 +167,6 @@ function JobListPage() {
   };
 
   const { data: jobsData, isLoading, error, refetch } = useJobs(currentFilters);
-  const { data: filterOptions } = useFilterOptions();
-  const { data: stats } = useStats();
 
   const handleSearch = (e) => {
     e.preventDefault();
