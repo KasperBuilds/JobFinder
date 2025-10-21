@@ -80,16 +80,6 @@ const Description = styled.p`
 `;
 
 
-const RemoteBadge = styled.span`
-  background: #dcfce7;
-  color: #166534;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  margin-left: 0.5rem;
-`;
-
 const ApplyLink = styled.div`
   display: flex;
   align-items: center;
