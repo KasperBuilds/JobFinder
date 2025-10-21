@@ -9,8 +9,7 @@
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
     "install-all": "npm install && cd server && npm install && cd ../client && npm install",
-    "start:prod": "cd server && npm start",
-    "postinstall": "npm run install-all"
+    "start:prod": "cd server && npm start"
   },
   "keywords": ["job-portal", "international-relations", "political-science", "law"],
   "author": "AHS Job Portal",

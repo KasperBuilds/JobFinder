@@ -86,7 +86,7 @@ class JobFetcher {
       'Public Policy': ['public policy internship', 'policy analysis intern', 'government affairs intern'],
       'Diplomacy': ['diplomacy internship', 'embassy intern', 'consular intern'],
       'Human Rights': ['human rights internship', 'advocacy intern', 'nonprofit intern'],
-      'International Development': ['international development internship', 'NGO intern', 'development intern'],
+      'International Development': ['international development internship', 'NGO intern'],
       'International Law': ['international law internship', 'treaty law intern', 'humanitarian law intern']
     };
 
