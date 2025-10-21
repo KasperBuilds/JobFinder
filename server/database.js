@@ -7,13 +7,18 @@ class Database {
     // Use Railway's persistent volume or fallback to local path
     // Try multiple paths for Railway compatibility
     let dbPath;
-    if (process.env.DATABASE_PATH) {
-      dbPath = process.env.DATABASE_PATH;
-    } else if (process.env.RAILWAY_ENVIRONMENT) {
-      // Railway environment - use /tmp for writable directory
+    
+    // Check for Railway environment first (more reliable detection)
+    if (process.env.RAILWAY_ENVIRONMENT || process.env.NODE_ENV === 'production') {
+      // Railway/production environment - use /tmp for writable directory
       dbPath = '/tmp/jobs.db';
+      console.log('🚀 Railway/Production environment detected, using /tmp/jobs.db');
+    } else if (process.env.DATABASE_PATH) {
+      dbPath = process.env.DATABASE_PATH;
+      console.log('📁 Using custom DATABASE_PATH:', dbPath);
     } else {
       dbPath = config.databasePath;
+      console.log('🏠 Using default database path:', dbPath);
     }
     
     console.log(`Initializing database at: ${dbPath}`);

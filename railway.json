@@ -11,6 +11,7 @@
   "environments": {
     "production": {
       "variables": {
+        "NODE_ENV": "production",
         "RAILWAY_ENVIRONMENT": "production",
         "DATABASE_PATH": "/tmp/jobs.db"
       }
