@@ -4,9 +4,41 @@ const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const cron = require('node-cron');
+const net = require('net');
 const config = require('./config');
 const Database = require('./database');
 const JobFetcher = require('./jobFetcher');
+
+// Function to find an available port
+function findAvailablePort(startPort, maxAttempts = 10) {
+  return new Promise((resolve, reject) => {
+    let port = startPort;
+    let attempts = 0;
+    
+    const tryPort = () => {
+      if (attempts >= maxAttempts) {
+        reject(new Error('No available ports found'));
+        return;
+      }
+      
+      const server = net.createServer();
+      server.listen(port, '0.0.0.0', () => {
+        server.once('close', () => {
+          resolve(port);
+        });
+        server.close();
+      });
+      
+      server.on('error', () => {
+        port++;
+        attempts++;
+        tryPort();
+      });
+    };
+    
+    tryPort();
+  });
+}
 
 const app = express();
 const db = new Database();
@@ -57,6 +89,15 @@ app.get('/api/test', (req, res) => {
   res.json({ 
     message: 'Server is running!', 
     timestamp: new Date().toISOString()
+  });
+});
+
+// Keep-alive endpoint to prevent Railway from killing the server
+app.get('/api/keepalive', (req, res) => {
+  res.json({ 
+    status: 'alive', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
   });
 });
 
@@ -185,64 +226,66 @@ app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// Start server
-const PORT = process.env.PORT || config.port;
-console.log(`Starting server on port ${PORT}...`);
-console.log(`Environment: ${config.nodeEnv}`);
-console.log(`Database path: ${config.databasePath}`);
-
-// Create server with better error handling
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`✅ Environment: ${config.nodeEnv}`);
-  console.log(`✅ Health check available at http://0.0.0.0:${PORT}/api/health`);
-  
-  // Schedule job fetching every 6 hours
-  if (config.rapidApiKey && config.rapidApiKey.length > 0) {
-    console.log('Scheduling job fetch every 6 hours...');
-    cron.schedule('0 */6 * * *', async () => {
-      console.log('Starting scheduled job fetch...');
-      try {
-        await jobFetcher.runFullFetch();
-        console.log('Scheduled job fetch completed');
-      } catch (error) {
-        console.error('Scheduled job fetch failed:', error);
+// Start server with dynamic port selection
+async function startServer() {
+  try {
+    const startPort = process.env.PORT || config.port;
+    console.log(`Finding available port starting from ${startPort}...`);
+    console.log(`Environment: ${config.nodeEnv}`);
+    console.log(`Database path: ${config.databasePath}`);
+    
+    const PORT = await findAvailablePort(startPort);
+    console.log(`✅ Found available port: ${PORT}`);
+    
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`✅ Server running on port ${PORT}`);
+      console.log(`✅ Environment: ${config.nodeEnv}`);
+      console.log(`✅ Health check available at http://0.0.0.0:${PORT}/api/health`);
+      
+      // Schedule job fetching every 6 hours
+      if (config.rapidApiKey && config.rapidApiKey.length > 0) {
+        console.log('Scheduling job fetch every 6 hours...');
+        cron.schedule('0 */6 * * *', async () => {
+          console.log('Starting scheduled job fetch...');
+          try {
+            await jobFetcher.runFullFetch();
+            console.log('Scheduled job fetch completed');
+          } catch (error) {
+            console.error('Scheduled job fetch failed:', error);
+          }
+        });
+        
+        // Run initial fetch on startup (with delay to avoid immediate rate limiting)
+        setTimeout(async () => {
+          console.log('Running initial job fetch...');
+          try {
+            await jobFetcher.runFullFetch();
+            console.log('Initial job fetch completed');
+          } catch (error) {
+            console.error('Initial job fetch failed:', error);
+          }
+        }, 10000); // 10 second delay
+      } else {
+        console.log('⚠️  RAPIDAPI_KEY not set or empty - job fetching disabled');
+        console.log('⚠️  Server will start but no jobs will be fetched until API key is provided');
       }
     });
     
-    // Run initial fetch on startup (with delay to avoid immediate rate limiting)
-    setTimeout(async () => {
-      console.log('Running initial job fetch...');
-      try {
-        await jobFetcher.runFullFetch();
-        console.log('Initial job fetch completed');
-      } catch (error) {
-        console.error('Initial job fetch failed:', error);
-      }
-    }, 10000); // 10 second delay
-  } else {
-    console.log('⚠️  RAPIDAPI_KEY not set or empty - job fetching disabled');
-    console.log('⚠️  Server will start but no jobs will be fetched until API key is provided');
-  }
-});
-
-// Handle server errors
-server.on('error', (error) => {
-  if (error.code === 'EADDRINUSE') {
-    console.error(`❌ Port ${PORT} is already in use. Trying alternative port...`);
-    const alternativePort = PORT + 1;
-    const altServer = app.listen(alternativePort, '0.0.0.0', () => {
-      console.log(`✅ Server running on alternative port ${alternativePort}`);
-    });
-    altServer.on('error', (altError) => {
-      console.error('❌ Failed to start server on alternative port:', altError);
+    // Handle server errors
+    server.on('error', (error) => {
+      console.error('❌ Server error:', error);
       process.exit(1);
     });
-  } else {
-    console.error('❌ Server failed to start:', error);
+    
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
     process.exit(1);
   }
-});
+}
+
+// Start the server
+startServer();
+
 
 // Graceful shutdown
 process.on('SIGINT', () => {
