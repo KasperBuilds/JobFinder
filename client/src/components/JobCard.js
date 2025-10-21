@@ -79,12 +79,6 @@ const Description = styled.p`
   overflow: hidden;
 `;
 
-const Salary = styled.div`
-  color: #059669;
-  font-weight: 600;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-`;
 
 const RemoteBadge = styled.span`
   background: #dcfce7;
@@ -107,12 +101,6 @@ const ApplyLink = styled.div`
 `;
 
 function JobCard({ job }) {
-  const formatSalary = () => {
-    if (job.salary_min && job.salary_max && job.salary_min > 0 && job.salary_max > 0) {
-      return `${job.currency} ${job.salary_min.toLocaleString()} - ${job.salary_max.toLocaleString()}`;
-    }
-    return null;
-  };
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
@@ -150,9 +138,6 @@ function JobCard({ job }) {
         </Description>
       )}
       
-      {formatSalary() && (
-        <Salary>{formatSalary()}</Salary>
-      )}
       
       {job.remote_allowed && (
         <RemoteBadge>Remote</RemoteBadge>

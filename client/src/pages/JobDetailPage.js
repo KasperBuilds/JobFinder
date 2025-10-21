@@ -139,12 +139,6 @@ const Skills = styled.div`
   margin-bottom: 1rem;
 `;
 
-const SalaryInfo = styled.div`
-  color: #059669;
-  font-weight: 600;
-  font-size: 1.125rem;
-  margin-bottom: 1rem;
-`;
 
 const EmploymentType = styled.div`
   color: #64748b;
@@ -262,11 +256,6 @@ function JobDetailPage() {
             <RemoteStatus>✓ Remote work allowed</RemoteStatus>
           )}
           
-          {job.salary_min && job.salary_max && job.salary_min > 0 && job.salary_max > 0 && (
-            <SalaryInfo>
-              Salary: {job.currency} {job.salary_min.toLocaleString()} - {job.salary_max.toLocaleString()}
-            </SalaryInfo>
-          )}
           
           {job.description && (
             <Description>
