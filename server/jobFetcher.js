@@ -139,7 +139,7 @@ class JobFetcher {
       location: job.job_city && job.job_state ? 
         `${job.job_city}, ${job.job_state}` : 
         (job.job_city || job.job_state || job.job_country || 'Location not specified'),
-      description: job.job_description || '',
+      description: this.cleanDescription(job.job_description || ''),
       requirements: this.formatRequirements(job.job_highlights?.Qualifications),
       employment_type: this.mapEmploymentType(job.job_employment_type),
       remote_allowed: this.isRemoteJob(job),
@@ -185,7 +185,9 @@ class JobFetcher {
     const numbers = salaryStr.match(/\d+/g);
     if (!numbers || numbers.length === 0) return null;
     
-    const nums = numbers.map(Number);
+    const nums = numbers.map(Number).filter(num => num > 0);
+    if (nums.length === 0) return null;
+    
     if (type === 'min') {
       return Math.min(...nums);
     } else {
@@ -266,15 +268,21 @@ class JobFetcher {
     
     // Handle both string and array cases
     if (Array.isArray(qualifications)) {
-      return qualifications.join('\n');
+      // Filter out empty values and 0
+      const filtered = qualifications.filter(item => item && item !== 0 && item !== '0');
+      return filtered.length > 0 ? filtered.join('\n') : '';
     }
     
     // If it's an object, try to extract meaningful content
     if (typeof qualifications === 'object') {
-      return JSON.stringify(qualifications);
+      const values = Object.values(qualifications);
+      const filtered = values.filter(item => item && item !== 0 && item !== '0');
+      return filtered.length > 0 ? filtered.join('\n') : '';
     }
     
-    return qualifications.toString();
+    // Handle string case - filter out just "0"
+    const str = qualifications.toString();
+    return str === '0' ? '' : str;
   }
 
   formatBenefits(benefits) {
@@ -296,6 +304,21 @@ class JobFetcher {
     
     // Handle string case
     return benefits.toString();
+  }
+
+  cleanDescription(description) {
+    if (!description) return '';
+    
+    // Remove any trailing "0" characters that might be artifacts
+    let cleaned = description.toString().trim();
+    
+    // Remove trailing "0" if it appears at the end
+    cleaned = cleaned.replace(/0+$/, '');
+    
+    // Remove any standalone "0" at the end of lines
+    cleaned = cleaned.replace(/\n0+$/g, '');
+    
+    return cleaned;
   }
 
   async saveJobs(jobs) {
