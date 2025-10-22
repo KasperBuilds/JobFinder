@@ -81,6 +81,12 @@ const CategoriesGrid = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.75rem;
+  }
 `;
 
 const CategoryCard = styled(Link)`
@@ -93,11 +99,20 @@ const CategoryCard = styled(Link)`
   color: inherit;
   transition: all 0.2s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     border-color: #1e40af;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    min-height: 160px;
   }
 `;
 
@@ -111,6 +126,12 @@ const CategoryIcon = styled.div`
   justify-content: center;
   margin: 0 auto 1rem;
   color: white;
+  
+  @media (max-width: 768px) {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const CategoryName = styled.h3`
@@ -118,12 +139,20 @@ const CategoryName = styled.h3`
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: #1e293b;
+  
+  @media (max-width: 768px) {
+    font-size: 1.125rem;
+  }
 `;
 
 const CategoryDescription = styled.p`
   color: #64748b;
   font-size: 0.875rem;
   line-height: 1.5;
+  
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const RecentJobsSection = styled.section`
@@ -138,6 +167,12 @@ const RecentJobsGrid = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.75rem;
+  }
 `;
 
 const JobCard = styled.div`

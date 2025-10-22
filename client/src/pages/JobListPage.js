@@ -77,6 +77,10 @@ const MainContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  
+  @media (max-width: 768px) {
+    padding: 1rem 0.75rem;
+  }
 `;
 
 const JobsGrid = styled.div`
@@ -87,6 +91,11 @@ const JobsGrid = styled.div`
   
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 0.75rem;
   }
 `;
 
@@ -162,6 +171,7 @@ const LoadMoreButton = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+  min-height: 48px;
   
   &:hover {
     background: #1d4ed8;
@@ -170,6 +180,12 @@ const LoadMoreButton = styled.button`
   &:disabled {
     background: #9ca3af;
     cursor: not-allowed;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+    margin: 1.5rem auto 0;
   }
 `;
 

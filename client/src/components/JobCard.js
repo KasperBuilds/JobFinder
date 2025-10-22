@@ -19,6 +19,11 @@ const Card = styled(Link)`
     transform: translateY(-2px);
     border-color: #3b82f6;
   }
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
 `;
 
 const Header = styled.div`
@@ -35,6 +40,11 @@ const Title = styled.h3`
   margin: 0;
   line-height: 1.3;
   flex: 1;
+  
+  @media (max-width: 768px) {
+    font-size: 1.125rem;
+    line-height: 1.4;
+  }
 `;
 
 const Company = styled.div`
@@ -42,6 +52,10 @@ const Company = styled.div`
   font-weight: 500;
   color: #64748b;
   margin-bottom: 0.5rem;
+  
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
 `;
 
 const Category = styled.span`
@@ -61,12 +75,22 @@ const Details = styled.div`
   margin-bottom: 1rem;
   font-size: 0.875rem;
   color: #64748b;
+  
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    font-size: 0.8rem;
+  }
 `;
 
 const DetailItem = styled.div`
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  min-height: 20px;
+  
+  @media (max-width: 768px) {
+    gap: 0.2rem;
+  }
 `;
 
 const Description = styled.p`
@@ -77,6 +101,12 @@ const Description = styled.p`
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-size: 0.875rem;
+  
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 2;
+  }
 `;
 
 
@@ -88,6 +118,11 @@ const ApplyLink = styled.div`
   font-size: 0.875rem;
   font-weight: 500;
   margin-top: 1rem;
+  
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    margin-top: 0.75rem;
+  }
 `;
 
 function JobCard({ job }) {

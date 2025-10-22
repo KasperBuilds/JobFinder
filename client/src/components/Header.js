@@ -12,7 +12,11 @@ const HeaderContainer = styled.header`
   backdrop-filter: blur(10px);
   border-bottom: 1px solid #e2e8f0;
   z-index: 1000;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
+  
+  @media (max-width: 768px) {
+    padding: 0.5rem 0;
+  }
 `;
 
 const HeaderContent = styled.div`
@@ -22,6 +26,11 @@ const HeaderContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  
+  @media (max-width: 768px) {
+    padding: 0 0.75rem;
+    gap: 1rem;
+  }
 `;
 
 const Logo = styled(Link)`
@@ -32,9 +41,15 @@ const Logo = styled(Link)`
   font-weight: 700;
   color: #1e40af;
   text-decoration: none;
+  flex-shrink: 0;
   
   &:hover {
     color: #1d4ed8;
+  }
+  
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+    font-size: 1.25rem;
   }
 `;
 
@@ -44,6 +59,11 @@ const LogoImage = styled.img`
   border-radius: 8px;
   object-fit: cover;
   border: 2px solid #1e40af;
+  
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const LogoText = styled.div`
@@ -57,6 +77,10 @@ const LogoTitle = styled.div`
   font-size: 1.25rem;
   font-weight: 700;
   color: #1e40af;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const LogoSubtitle = styled.div`
@@ -64,6 +88,10 @@ const LogoSubtitle = styled.div`
   font-weight: 500;
   color: #64748b;
   margin-top: -2px;
+  
+  @media (max-width: 768px) {
+    font-size: 0.625rem;
+  }
 `;
 
 const Nav = styled.nav`
@@ -100,13 +128,19 @@ const SearchContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  flex: 1;
+  max-width: 400px;
+  
+  @media (max-width: 768px) {
+    max-width: 200px;
+  }
 `;
 
 const SearchInput = styled.input`
   padding: 0.5rem 1rem 0.5rem 2.5rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
-  width: 300px;
+  width: 100%;
   font-size: 0.875rem;
   
   &:focus {
@@ -116,7 +150,8 @@ const SearchInput = styled.input`
   }
   
   @media (max-width: 768px) {
-    width: 200px;
+    padding: 0.5rem 0.75rem 0.5rem 2rem;
+    font-size: 0.8rem;
   }
 `;
 
@@ -126,15 +161,30 @@ const SearchIcon = styled(FiSearch)`
   color: #9ca3af;
   width: 1rem;
   height: 1rem;
+  
+  @media (max-width: 768px) {
+    left: 0.5rem;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
 `;
 
 const MobileMenuButton = styled.button`
   display: none;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #f3f4f6;
+  }
   
   @media (max-width: 768px) {
     display: block;
-    padding: 0.5rem;
-    color: #64748b;
   }
 `;
 

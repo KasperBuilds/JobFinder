@@ -15,6 +15,10 @@ const AppContainer = styled.div`
 const MainContent = styled.main`
   flex: 1;
   padding-top: 80px; /* Account for fixed header */
+  
+  @media (max-width: 768px) {
+    padding-top: 70px; /* Smaller header on mobile */
+  }
 `;
 
 function App() {
