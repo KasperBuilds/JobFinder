@@ -176,7 +176,6 @@ function Header() {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/jobs">All Jobs</NavLink>
           <NavLink to="/categories">Categories</NavLink>
-          <NavLink to="/about">About</NavLink>
         </Nav>
         
         <SearchContainer>

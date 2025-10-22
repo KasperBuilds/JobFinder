@@ -6,14 +6,11 @@ class JobFetcher {
   constructor() {
     this.db = new Database();
     this.categories = [
-      'International Relations',
-      'Political Science', 
-      'Law',
-      'Public Policy',
-      'Diplomacy',
+      'International Relations & Diplomacy',
+      'Political Science & Public Policy', 
+      'Law & International Law',
       'Human Rights',
-      'International Development',
-      'International Law'
+      'International Development'
     ];
     
     // Rate limiting: 1000 requests per hour = ~16 requests per minute
@@ -80,14 +77,11 @@ class JobFetcher {
 
   getSearchQueriesForCategory(category) {
     const queries = {
-      'International Relations': ['international relations internship'], //, 'foreign affairs intern', 'diplomacy intern'],
-      // 'Political Science': ['political science internship'], //, 'policy intern', 'government intern'],
-      // 'Law': ['legal internship'], //, 'law intern', 'paralegal intern'],
-      // 'Public Policy': ['public policy internship'], //, 'policy analysis intern', 'government affairs intern'],
-      // 'Diplomacy': ['diplomacy internship'], //, 'embassy intern', 'consular intern'],
-      // 'Human Rights': ['human rights internship'], //, 'advocacy intern', 'nonprofit intern'],
-      // 'International Development': ['international development internship'], //, 'NGO intern'],
-      // 'International Law': ['international law internship'] //, 'treaty law intern', 'humanitarian law intern']
+      'International Relations & Diplomacy': ['international relations internship', 'diplomacy internship', 'foreign affairs intern'],
+      'Political Science & Public Policy': ['political science internship', 'public policy internship', 'policy intern', 'government intern'],
+      'Law & International Law': ['legal internship', 'international law internship', 'law intern', 'paralegal intern'],
+      'Human Rights': ['human rights internship', 'advocacy intern', 'nonprofit intern'],
+      'International Development': ['international development internship', 'NGO intern']
     };
 
     return queries[category] || [`${category} internship`];
