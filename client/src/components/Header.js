@@ -29,7 +29,8 @@ const HeaderContent = styled.div`
   
   @media (max-width: 768px) {
     padding: 0 0.75rem;
-    gap: 1rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 `;
 
@@ -50,6 +51,8 @@ const Logo = styled(Link)`
   @media (max-width: 768px) {
     gap: 0.5rem;
     font-size: 1.25rem;
+    order: 1;
+    min-width: 0;
   }
 `;
 
@@ -132,7 +135,8 @@ const SearchContainer = styled.div`
   max-width: 400px;
   
   @media (max-width: 768px) {
-    max-width: 200px;
+    max-width: 150px;
+    order: 3;
   }
 `;
 
@@ -150,8 +154,9 @@ const SearchInput = styled.input`
   }
   
   @media (max-width: 768px) {
-    padding: 0.5rem 0.75rem 0.5rem 2rem;
-    font-size: 0.8rem;
+    padding: 0.4rem 0.5rem 0.4rem 1.75rem;
+    font-size: 0.75rem;
+    min-width: 120px;
   }
 `;
 
@@ -163,9 +168,9 @@ const SearchIcon = styled(FiSearch)`
   height: 1rem;
   
   @media (max-width: 768px) {
-    left: 0.5rem;
-    width: 0.875rem;
-    height: 0.875rem;
+    left: 0.4rem;
+    width: 0.75rem;
+    height: 0.75rem;
   }
 `;
 
@@ -178,6 +183,7 @@ const MobileMenuButton = styled.button`
   cursor: pointer;
   border-radius: 0.375rem;
   transition: background-color 0.2s;
+  flex-shrink: 0;
   
   &:hover {
     background-color: #f3f4f6;
@@ -185,6 +191,7 @@ const MobileMenuButton = styled.button`
   
   @media (max-width: 768px) {
     display: block;
+    order: 2;
   }
 `;
 
