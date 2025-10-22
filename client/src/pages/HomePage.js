@@ -198,28 +198,16 @@ const categories = [
     path: '/jobs?category=International Relations'
   },
   {
-    name: 'Political Science',
-    description: 'Research, analysis, and policy positions',
-    icon: FiUsers,
-    path: '/jobs?category=Political Science'
-  },
-  {
-    name: 'Law',
-    description: 'Legal positions, attorneys, legal counsel',
-    icon: FiBookOpen,
-    path: '/jobs?category=Law'
-  },
-  {
     name: 'Public Policy',
-    description: 'Government policy, regulatory affairs',
+    description: 'Government policy, regulatory affairs, political science',
     icon: FiBriefcase,
     path: '/jobs?category=Public Policy'
   },
   {
-    name: 'Diplomacy',
-    description: 'Diplomatic positions, embassy roles',
-    icon: FiGlobe,
-    path: '/jobs?category=Diplomacy'
+    name: 'Law',
+    description: 'Legal positions, attorneys, legal counsel, international law',
+    icon: FiBookOpen,
+    path: '/jobs?category=Law'
   },
   {
     name: 'Human Rights',
@@ -232,12 +220,6 @@ const categories = [
     description: 'NGO positions, development work',
     icon: FiBriefcase,
     path: '/jobs?category=International Development'
-  },
-  {
-    name: 'International Law',
-    description: 'International legal positions',
-    icon: FiBookOpen,
-    path: '/jobs?category=International Law'
   }
 ];
 
@@ -252,8 +234,8 @@ function HomePage() {
             Find Your Dream Internship
           </HeroTitle>
           <HeroSubtitle>
-            Discover internship and career opportunities in International Relations, Political Science, Law, 
-            Public Policy, Diplomacy, Human Rights, International Development, and International Law
+            Discover internship and career opportunities in International Relations, Public Policy, Law, 
+            Human Rights, and International Development
           </HeroSubtitle>
           <CTAButton to="/jobs">
             Browse All Jobs

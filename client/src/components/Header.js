@@ -175,7 +175,6 @@ function Header() {
         <Nav isOpen={isMenuOpen}>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/jobs">All Jobs</NavLink>
-          <NavLink to="/categories">Categories</NavLink>
         </Nav>
         
         <SearchContainer>

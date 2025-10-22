@@ -5,7 +5,6 @@ import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import JobListPage from './pages/JobListPage';
 import JobDetailPage from './pages/JobDetailPage';
-import CategoriesPage from './pages/CategoriesPage';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -27,7 +26,6 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/jobs" element={<JobListPage />} />
           <Route path="/jobs/:id" element={<JobDetailPage />} />
-          <Route path="/categories" element={<CategoriesPage />} />
         </Routes>
       </MainContent>
     </AppContainer>
