@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
 import { FiSearch, FiRefreshCw } from 'react-icons/fi';
@@ -150,9 +150,42 @@ const RefreshButton = styled.button`
   }
 `;
 
+const LoadMoreButton = styled.button`
+  display: block;
+  margin: 2rem auto 0;
+  padding: 1rem 2rem;
+  background: #1e40af;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  
+  &:hover {
+    background: #1d4ed8;
+  }
+  
+  &:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+`;
+
+const PaginationInfo = styled.div`
+  text-align: center;
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+`;
+
 function JobListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [allJobs, setAllJobs] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalJobs, setTotalJobs] = useState(0);
 
   // Get current filters from URL
   const currentFilters = {
@@ -162,11 +195,25 @@ function JobListPage() {
     employment_type: searchParams.get('employment_type') || '',
     remote_only: searchParams.get('remote_only') === 'true',
     salary_min: searchParams.get('salary_min') || '',
-    page: parseInt(searchParams.get('page')) || 1,
-    limit: 20
+    page: currentPage,
+    limit: 50
   };
 
   const { data: jobsData, isLoading, error, refetch } = useJobs(currentFilters);
+
+  // Update allJobs when new data comes in
+  useEffect(() => {
+    if (jobsData?.jobs) {
+      if (currentPage === 1) {
+        // First page - replace all jobs
+        setAllJobs(jobsData.jobs);
+      } else {
+        // Subsequent pages - append jobs
+        setAllJobs(prev => [...prev, ...jobsData.jobs]);
+      }
+      setTotalJobs(jobsData.pagination?.total || 0);
+    }
+  }, [jobsData, currentPage]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -181,10 +228,14 @@ function JobListPage() {
     }
     newParams.delete('page'); // Reset to first page
     setSearchParams(newParams);
+    setCurrentPage(1);
+    setAllJobs([]);
   };
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
+    setCurrentPage(1);
+    setAllJobs([]);
     try {
       await refetch();
     } finally {
@@ -192,7 +243,12 @@ function JobListPage() {
     }
   };
 
-  const totalJobs = jobsData?.pagination?.total || 0;
+  const handleLoadMore = () => {
+    setCurrentPage(prev => prev + 1);
+  };
+
+  const currentJobs = allJobs.length;
+  const hasMore = currentJobs < totalJobs;
 
   return (
     <PageContainer>
@@ -272,7 +328,7 @@ function JobListPage() {
           </ErrorState>
         )}
 
-        {!isLoading && !error && jobsData?.jobs?.length === 0 && (
+        {!isLoading && !error && allJobs.length === 0 && (
           <EmptyState>
             <div>No jobs found matching your criteria.</div>
             <div style={{ marginTop: '0.5rem', fontSize: '0.875rem' }}>
@@ -281,12 +337,24 @@ function JobListPage() {
           </EmptyState>
         )}
 
-        {!isLoading && !error && jobsData?.jobs?.length > 0 && (
-          <JobsGrid>
-            {jobsData.jobs.map((job) => (
-              <JobCard key={job.job_id} job={job} />
-            ))}
-          </JobsGrid>
+        {!isLoading && !error && allJobs.length > 0 && (
+          <>
+            <JobsGrid>
+              {allJobs.map((job) => (
+                <JobCard key={job.job_id} job={job} />
+              ))}
+            </JobsGrid>
+            
+            {hasMore && (
+              <LoadMoreButton onClick={handleLoadMore} disabled={isLoading}>
+                Load More Jobs
+              </LoadMoreButton>
+            )}
+            
+            <PaginationInfo>
+              Showing {currentJobs} of {totalJobs} jobs
+            </PaginationInfo>
+          </>
         )}
       </MainContent>
     </PageContainer>
