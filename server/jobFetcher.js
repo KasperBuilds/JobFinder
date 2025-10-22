@@ -6,9 +6,9 @@ class JobFetcher {
   constructor() {
     this.db = new Database();
     this.categories = [
-      'International Relations & Diplomacy',
-      'Political Science & Public Policy', 
-      'Law & International Law',
+      'International Relations',
+      'Public Policy', 
+      'Law',
       'Human Rights',
       'International Development'
     ];
@@ -77,9 +77,9 @@ class JobFetcher {
 
   getSearchQueriesForCategory(category) {
     const queries = {
-      'International Relations & Diplomacy': ['international relations internship', 'diplomacy internship', 'foreign affairs intern'],
-      'Political Science & Public Policy': ['political science internship', 'public policy internship', 'policy intern', 'government intern'],
-      'Law & International Law': ['legal internship', 'international law internship', 'law intern', 'paralegal intern'],
+      'International Relations': ['international relations internship', 'diplomacy internship', 'foreign affairs intern', 'embassy intern', 'consular intern'],
+      'Public Policy': ['public policy internship', 'political science internship', 'policy intern', 'government intern', 'policy analysis intern', 'government affairs intern'],
+      'Law': ['legal internship', 'law intern', 'paralegal intern', 'international law internship', 'treaty law intern', 'humanitarian law intern'],
       'Human Rights': ['human rights internship', 'advocacy intern', 'nonprofit intern'],
       'International Development': ['international development internship', 'NGO intern']
     };
