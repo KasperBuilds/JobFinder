@@ -47,7 +47,6 @@ app.use(helmet({
   // keep other helmet protections
 }));
 // Middleware
-app.use(helmet());
 app.use(compression());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
