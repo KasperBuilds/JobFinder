@@ -9,23 +9,45 @@
       name="description"
       content="CMU AHS Internship & Career Opportunities Portal - Find internships and careers in International Relations, Political Science, Law, Public Policy, Diplomacy, Human Rights, International Development, and International Law"
     />
-    <!-- <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" /> -->
+
+    <!-- Manifest + Fonts -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <title>CMU AHS Internship & Career Opportunities Portal</title>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BN9ZVZ245V"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-BN9ZVZ245V');
-</script>
+
+    <!-- ✅ Google Analytics 4 (gtag.js) setup -->
+    <script>
+      // Define gtag before async load so it exists immediately
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        window.dataLayer.push(arguments);
+      }
+    </script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-BN9ZVZ245V"
+    ></script>
+    <script>
+      gtag("js", new Date());
+      gtag("config", "G-BN9ZVZ245V", {
+        send_page_view: true,
+      });
+    </script>
+    <!-- ✅ End GA setup -->
+
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
+    <!-- CRA or Vite build script automatically injected here -->
+    <!-- Example: <script defer="defer" src="/static/js/main.[hash].js"></script> -->
   </body>
 </html>
