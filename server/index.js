@@ -13,6 +13,22 @@ const app = express();
 const db = new Database();
 const jobFetcher = new JobFetcher();
 
+// ✅ Allow Google Analytics + Fonts + inline scripts
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+      "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com",
+      "img-src 'self' data: https://www.google-analytics.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com"
+    ].join("; ")
+  );
+  next();
+});
+
 // Middleware
 app.use(helmet());
 app.use(compression());
