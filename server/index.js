@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const cron = require('node-cron');
@@ -13,22 +12,40 @@ const app = express();
 const db = new Database();
 const jobFetcher = new JobFetcher();
 
-// ✅ Allow Google Analytics + Fonts + inline scripts
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
-      "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com",
-      "img-src 'self' data: https://www.google-analytics.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com"
-    ].join("; ")
-  );
-  next();
-});
+const helmet = require('helmet');
 
+app.use(helmet({
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      "default-src": ["'self'"],
+      "base-uri": ["'self'"],
+      "frame-ancestors": ["'self'"],
+      "object-src": ["'none'"],
+      // ✅ allow GA scripts + inline bootstrap
+      "script-src": [
+        "'self'",
+        "'unsafe-inline'",
+        "https://www.googletagmanager.com",
+        "https://www.google-analytics.com"
+      ],
+      // ✅ allow GA beacons/hits
+      "connect-src": [
+        "'self'",
+        "https://www.google-analytics.com",
+        "https://region1.google-analytics.com"
+      ],
+      // ✅ allow GA images (beacon fallback)
+      "img-src": ["'self'", "data:", "https://www.google-analytics.com"],
+      // fonts & styles you already use
+      "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      "font-src": ["'self'", "https:", "data:"],
+      // optional: keep upgrade-insecure-requests if you want
+      // "upgrade-insecure-requests": []
+    }
+  },
+  // keep other helmet protections
+}));
 // Middleware
 app.use(helmet());
 app.use(compression());
